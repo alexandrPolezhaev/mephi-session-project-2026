@@ -59,7 +59,6 @@ sudo rpm -ivh /tmp/tcpdump-4.99.5-1.red80.x86_64.rpm
 sudo dnf install policycoreutils-python-utils -y
 rpm -q policycoreutils-python-utils > /home/alex/semanage-package.out
 rpm -qf /usr/sbin/semanage
-dnf history > /home/alex/dnf.out
 ```
 
 ## 3. Управление файловыми системами
@@ -87,7 +86,6 @@ sudo nano /etc/fstab
 sudo systemctl daemon-reload
 sudo mount /mephi-web
 findmnt --mountpoint /mephi-web/
-cp /etc/fstab /home/alex/fstab
 ```
 
 ## 4. Управление сервисами
@@ -102,7 +100,6 @@ cp /etc/fstab /home/alex/fstab
 sudo systemctl start nginx.service
 sudo systemctl enable nginx.service
 systemctl status nginx.service
-journalctl -u nginx.service -b > /home/alex/journalctl.out
 ```
 
 ## 5. Управление доступом
@@ -137,7 +134,6 @@ sudo chmod 770 /data/mephi-2026/
 sudo chmod g+s /data/mephi-2026/
 sudo setfacl -m g:curators:5 /data/mephi-2026/
 sudo setfacl -d -m g:curators:5 /data/mephi-2026/
-getfacl /data/mephi-2026 > /home/alex/getfacl.out
 ```
 
 Фактические права, владельцы и наследуемые ACL сохранены в [stat.out](stat.out) и [getfacl.out](getfacl.out).
@@ -164,7 +160,6 @@ getenforce > /home/alex/getenforce.out
 sudo semanage fcontext -a -t httpd_sys_content_t '/mephi-web(/.*)?'
 sudo restorecon -Rv /mephi-web/
 ls -Zd /mephi-web/
-sudo semanage fcontext -l -C > /home/alex/semanage-fcontext.out
 ```
 
 В HTTP-блоке `server` файла `/etc/nginx/nginx.conf` установлен корень веб-контента:
@@ -178,8 +173,6 @@ root /mephi-web;
 ```bash
 sudo nginx -T
 sudo systemctl reload nginx.service
-stat /data/mephi-2026/ /mephi-web/ > /home/alex/stat.out
-cp /etc/nginx/nginx.conf /home/alex/nginx.conf
 ```
 
 ## 6. Аутентификация
@@ -242,7 +235,6 @@ sudo chage -l alex
 ls -lZ /mephi-web/index.html
 curl -sS http://localhost/ > /home/alex/curl.out
 cat /home/alex/curl.out
-history > /home/alex/history.out
 ```
 
 Полученный HTML сохранён в [curl.out](curl.out). Скриншот показывает команду `curl` и ответ сервера с номером зачётной книжки.
