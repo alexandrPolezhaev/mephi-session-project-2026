@@ -1,0 +1,164 @@
+    1  history 
+    2  nmcli device status
+    3  nmcli connection show
+    4  sudo nmcli connection modify ens160 ipv4.method auto
+    5  nmcli -f ipv4.method connection show ens160
+    6  nmcli -f IP4,DHCP device show ens160
+    7  nmcli -f IP4,DHCP4 device show ens160
+    8  nmcli -f connection.autoconnect connection show ens160
+    9  sudo hostnamectl set-hostname mephi-2026.domain.local
+   10  hostnamectl
+   11  ping -c 4 8.8.8.8 > /home/alex/ping.out
+   12  cat /home/alex/ping.out
+   13  sudo dnf upgrade -y
+   14  sudo dnf install nginx libcap-ng-utils -y
+   15  sudo dnf download --destdir /tmp --resolve tcpdump
+   16  sudo rpm -ivh /tmp/tcpdump-4.99.5-1.red80.x86_64.rpm
+   17  dnf history > /home/alex/dnf.out
+   18  cat /home/alex/dnf.out
+   19  lsblk
+   20  sudo blkid
+   21  sudo fdisk -l /dev/nvme0n2
+   22  sudo fdisk /dev/nvme0n2
+   23  lsblk
+   24  sudo mkfs.ext4 -L MEPHI_WEB /dev/nvme0n2p1
+   25  sudo blkid /dev/nvme0n2p1
+   26  sudo mkdir /mephi-web
+   27  ls -l /
+   28  cat /etc/fstab
+   29  sudo nano /etc/fstab
+   30  cat /etc/fstab
+   31  sudo systemctl daemon-reload
+   32  sudo mount /mephi-web
+   33  findmnt --mountpoint /mephi-web/
+   34  cp /etc/fstab /home/alex/fstab
+   35  cat /home/alex/fstab
+   36  systemctl status nginx.service
+   37  sudo systemctl start nginx.service
+   38  sudo systemctl enable nginx.service
+   39  sudo systemctl status nginx.service
+   40  journalctl -u nginx.service -b > /home/alex/journalctl.out
+   41  cat /home/alex/journalctl.out
+   42  cat /etc/pam.d/passwd
+   43  cat /etc/security/pwquality.conf
+   44  sudo nano /etc/security/pwquality.conf
+   45  grep -E 'minlen|enforce_for_root' /etc/security/pwquality.conf
+   46  grep '^PASS_' /etc/login.defs
+   47  sudo nano /etc/login.defs
+   48  grep '^PASS_' /etc/login.defs
+   49  passwd alex
+   50  passwd
+   51  sudo chage -M 90 alex
+   52  sudo chage -l alex
+   53  cp /etc/security/pwquality.conf /home/alex/pwquality.conf
+   54  cp /etc/login.defs /home/alex/login.defs
+   55  cat /home/alex/pwquality.conf 
+   56  cat /home/alex/login.defs
+   57  ls -l
+   58  getent group | grep -E '^(curators|developers):'
+   59  sudo groupadd -g 4444 curators
+   60  sudo groupadd developers
+   61  getent group | grep -E '^(curators|developers):'
+   62  getent passwd | grep -E '^(user1|user2|user3|curator1|curator2):'
+   63  sudo useradd -u 5501 -m -s /bin/bash user1
+   64  sudo passwd user1
+   65  sudo useradd -u 5502 -m -s /bin/bash user2
+   66  sudo passwd user2
+   67  sudo useradd -u 5503 -m -s /bin/bash user3
+   68  sudo passwd user3
+   69  usermod -aG developers user1
+   70  sudo usermod -aG developers user1
+   71  sudo usermod -aG developers user2
+   72  sudo usermod -aG developers user3
+   73  sudo useradd -m -s /bin/bash curator1
+   74  sudo passwd curator1
+   75  sudo useradd -m -s /bin/bash curator2
+   76  sudo passwd curator2
+   77  sudo usermod -aG curators curator1
+   78  sudo usermod -aG curators curator2
+   79  getent passwd | grep -E '^(user1|user2|user3|curator1|curator2):'
+   80  getent group | grep -E '^(curators|developers):'
+   81  sudo mkdir -p /data/mephi-2026
+   82  sudo chown root:developers /data/mephi-2026/
+   83  ls -ld /data/mephi-2026/
+   84  sudo chmod 770 /data/mephi-2026/
+   85  ls -ld /data/mephi-2026/
+   86  sudo chmod g+s /data/mephi-2026/
+   87  ls -ld /data/mephi-2026/
+   88  getfacl /data/mephi-2026/
+   89  sudo setfacl -m g:curators:5 /data/mephi-2026/
+   90  getfacl /data/mephi-2026/
+   91  sudo setfacl -d -m g:curators:5 /data/mephi-2026/
+   92  getfacl /data/mephi-2026/
+   93  getfacl /data/mephi-2026 > /home/alex/getfacl.out
+   94  cat /home/alex/getfacl.out
+   95  cp /etc/passwd /home/alex/passwd
+   96  cat /home/alex/passwd
+   97  cp /etc/group /home/alex/group
+   98  cat /home/alex/group
+   99  sudo cp /etc/shadow /home/alex/shadow
+  100  sudo chown alex:alex /home/alex/shadow
+  101  sudo chmod 600 /home/alex/shadow
+  102  cat /home/alex/shadow
+  103  whereis tcpdump
+  104  getcap /usr/sbin/tcpdump
+  105  sudo setcap cap_net_raw=eip /usr/sbin/tcpdump
+  106  getcap /usr/sbin/tcpdump
+  107  ls -l /usr/sbin/tcpdump
+  108  sudo -u user1 tcpdump -nn -c 5 2>&1 | tee /home/alex/tcpdump-user1.out > /dev/null
+  109  cat /home/alex/tcpdump-user1.out
+  110  sudo -u curator2 tcpdump -nn -c 5 2>&1 | tee /home/alex/tcpdump-curator2.out > /dev/null
+  111  cat /home/alex/tcpdump-curator2.out
+  112  getcap /usr/sbin/tcpdump > /home/alex/getcap.out
+  113  cat /home/alex/getcap.out
+  114  getenforce 
+  115  sestatus
+  116  rpm -q policycoreutils-python-utils
+  117  sudo dnf install policycoreutils-python-utils -y
+  118  rpm -q policycoreutils-python-utils
+  119  whereis semanage
+  120  rpm -qf /usr/sbin/semanage
+  121  ls -Zd /mephi-web/
+  122  ps -Z -C nginx
+  123  sudo semanage fcontext -a -t httpd_sys_content_t '/mephi-web(/.*)?'
+  124  sudo restorecon -Rv /mephi-web/
+  125  ls -Zd /mephi-web/
+  126  sudo nginx -T
+  127  sudo nano /etc/nginx/nginx.conf
+  128  sudo nginx -T
+  129  sudo systemctl reload nginx.service
+  130  systemctl status nginx.service
+  131  sudo cat /etc/nginx/nginx.conf
+  132  getfacl /data/mephi-2026/ > /home/alex/getfacl.out
+  133  cat /home/alex/getfacl.out
+  134  stat /data/mephi-2026/ /mephi-web/ > /home/alex/stat.out
+  135  cat /home/alex/stat.out
+  136  rpm -q policycoreutils-python-utils > /home/alex/semanage-package.out
+  137  cat /home/alex/semanage-package.out
+  138  getenforce > /home/alex/getenforce.out
+  139  cat /home/alex/getenforce.out
+  140  cp /etc/nginx/nginx.conf /home/alex/nginx.conf
+  141  cat /home/alex/nginx.conf
+  142  sudo semanage fcontext -l -C > /home/alex/semanage-fcontext.out
+  143  cat /home/alex/semanage-fcontext.out
+  144  dnf history > /home/alex/dnf.out
+  145  cat /home/alex/dnf.out
+  146  journalctl -u nginx.service -b > /home/alex/journalctl.out
+  147  cat /home/alex/journalctl.out
+  148  ls -l /etc/pam.d/
+  149  cat /etc/pam.d/login
+  150  cat /etc/pam.d/system-auth
+  151  sudo nano /etc/security/login-access.conf
+  152  cat /etc/security/login-access.conf
+  153  ls -l /usr/lib64/security/pam_access.so
+  154  sudo nano /etc/pam.d/login
+  155  cat /etc/pam.d/login
+  156  cp /etc/pam.d/login /home/alex/login
+  157  cat /home/alex/login
+  158  cp /etc/security/login-access.conf /home/alex/login-access.conf
+  159  cat /home/alex/login-access.conf
+  160  sudo nano /mephi-web/index.html
+  161  ls -lZ /mephi-web/index.html
+  162  curl -sS http://localhost/ > /home/alex/curl.out
+  163  cat /home/alex/curl.out 
+  164  history > /home/alex/history.out
